@@ -30,18 +30,19 @@ import (
  *****************************/
 
 /* choices */
-type choice struct {
+type choices struct {
 	/**/
 	cmd         string
 	description string
 	nextNode    *storyNode
+	nextChoice  *choices
 }
 
 /* storyNode */
 type storyNode struct {
 	/**/
 	text    string
-	choices []*choice
+	choices *choices
 }
 
 /* NPC */
@@ -58,9 +59,17 @@ type NPC struct {
 /* addChoice*/
 func (node *storyNode) addChoice(cmd string, description string, nextNode *storyNode) {
 	/* Create choice*/
-	choice := &choice{cmd, description, nextNode}
-	/**/
-	node.choices = append(node.choices, choice)
+	choice := &choices{cmd, description, nextNode, nil}
+	/* Check for NIL */
+	if node.choices == nil {
+		node.choices = choice
+	} else {
+		currentChoice := node.choices
+		for currentChoice.nextChoice != nil {
+			currentChoice = currentChoice.nextChoice
+		}
+		currentChoice.nextChoice = choice
+	}
 }
 
 /* render */
@@ -68,20 +77,23 @@ func (node *storyNode) render() {
 	/* Print description */
 	fmt.Println(node.text)
 	/* Print choices */
-	if node.choices != nil {
-		for _, choice := range node.choices {
-			fmt.Println(choice.cmd, choice.description)
-		}
+	currentChoice := node.choices
+	for currentChoice != nil {
+		fmt.Println(currentChoice.cmd, ":", currentChoice.description)
+		currentChoice = currentChoice.nextChoice
 	}
 }
 
 /* executeCmd */
 func (node *storyNode) executeCmd(cmd string) *storyNode {
 	/*  */
-	for _, choice := range node.choices {
-		if strings.ToLower(choice.cmd) == strings.ToLower(cmd) {
-			return choice.nextNode
+	currentChoice := node.choices
+	for currentChoice != nil {
+		/* Match command */
+		if strings.ToLower(currentChoice.cmd) == strings.ToLower(cmd) {
+			return currentChoice.nextNode
 		}
+		currentChoice = currentChoice.nextChoice
 	}
 	/* Wrong command */
 	fmt.Println("Wrong command!")
