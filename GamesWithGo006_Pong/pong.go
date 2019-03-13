@@ -384,7 +384,7 @@ func main() {
 	}
 
 	/*Create window*/
-	window, err := sdl.CreateWindow("Testing SDL2", sdl.WINDOWPOS_UNDEFINED,
+	window, err := sdl.CreateWindow("Popong popong", sdl.WINDOWPOS_UNDEFINED,
 		sdl.WINDOWPOS_UNDEFINED, int32(winWidth), int32(winHeight), sdl.WINDOW_SHOWN)
 	/* Check error*/
 	if err != nil {
