@@ -18,3 +18,6 @@ Learning Go language with books and tutorials.
   - Added some examples for Raspebrry Pi and crosscompiled them.
     - GO-GPIO
     - GoBot
+  - Tested crosscompiling for VoCore2 MIPS architecture
+    - 001_HelloWorld (HelloWorld_vocore2)
+    - 0032_Test0032_Interfaces_Errors (test031_mips)
